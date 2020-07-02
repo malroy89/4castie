@@ -1,0 +1,38 @@
+import de.lamaka.fourcastie.Deps
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+
+    defaultConfig {
+        applicationId "de.lamaka.fourcastie"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation Deps.kotlin.stdlib
+    implementation Deps.androidx.coreKtx
+    implementation Deps.androidx.appcompat
+
+    testImplementation Deps.test.junit
+    androidTestImplementation Deps.test.androidx.junit
+    androidTestImplementation Deps.test.androidx.espresso.core
+
+}

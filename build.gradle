@@ -1,0 +1,23 @@
+import de.lamaka.fourcastie.Deps
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath Deps.agp
+        classpath Deps.kotlin.plugin
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
