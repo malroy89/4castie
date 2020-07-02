@@ -10,10 +10,13 @@ final class Deps {
         static final String agp = Version.ANDROID_GRADLE_PLUGIN_VERSION
         static final String kotlin = "1.3.72"
         static final String retrofit = "2.8.1"
+        static final String material = "1.1.0"
 
         static final class androidx {
             static final String coreKtx = "1.3.0"
             static final String appcompat = "1.1.0"
+            static final String navigation = "2.3.0"
+            static final String constraintLayout = "1.1.3"
         }
 
         static final class test {
@@ -39,8 +42,15 @@ final class Deps {
     static final class androidx {
         static final String coreKtx = "androidx.core:core-ktx:$versions.androidx.coreKtx"
         static final String appcompat = "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+        static final String constraintLayout = "androidx.constraintlayout:constraintlayout:$versions.androidx.constraintLayout"
+
+        static final class navigation {
+            static final String fragment = "androidx.navigation:navigation-fragment-ktx:$versions.androidx.navigation"
+            static final String uiKtx = "androidx.navigation:navigation-ui-ktx:$versions.androidx.navigation"
+        }
     }
 
+    static final String material = "com.google.android.material:material:$versions.material"
     public static final String agp = "${SdkConstants.GRADLE_PLUGIN_NAME}${versions.agp}"
 
     static final class test {

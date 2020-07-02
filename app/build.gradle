@@ -30,6 +30,10 @@ dependencies {
     implementation Deps.kotlin.stdlib
     implementation Deps.androidx.coreKtx
     implementation Deps.androidx.appcompat
+    implementation Deps.material
+    implementation Deps.androidx.navigation.fragment
+    implementation Deps.androidx.navigation.uiKtx
+    implementation Deps.androidx.constraintLayout
 
     testImplementation Deps.test.junit
     androidTestImplementation Deps.test.androidx.junit
