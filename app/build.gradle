@@ -4,6 +4,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+Properties props = new Properties()
+def propsFile = rootProject.file("local.properties")
+props.load(propsFile.newDataInputStream())
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
@@ -16,6 +20,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "OPEN_WEATHER_MAP_API_KEY", props.getProperty('OPEN_WEATHER_MAP_API_KEY')
     }
 
     buildTypes {
@@ -24,19 +30,33 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation Deps.kotlin.stdlib
+
     implementation Deps.androidx.coreKtx
     implementation Deps.androidx.appcompat
-    implementation Deps.material
     implementation Deps.androidx.navigation.fragment
     implementation Deps.androidx.navigation.uiKtx
     implementation Deps.androidx.constraintLayout
 
+    implementation Deps.androidx.lifecycle.livedataKtx
+
+    implementation Deps.material
+
+    implementation Deps.retrofit.core
+    implementation Deps.retrofit.gsonConverter
+    implementation Deps.okhttp.loggingInterceptor
+
+    implementation Deps.timber
+
     testImplementation Deps.test.junit
     androidTestImplementation Deps.test.androidx.junit
     androidTestImplementation Deps.test.androidx.espresso.core
-
 }
