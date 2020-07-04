@@ -2,7 +2,6 @@ package de.lamaka.fourcastie
 
 import com.android.SdkConstants
 import com.android.Version
-import groovy.transform.CompileStatic
 
 final class Deps {
     private static final class versions {
@@ -12,6 +11,7 @@ final class Deps {
         static final String material = "1.1.0"
         static final String timber = "4.7.1"
         static final String okhttp = "4.7.2"
+        static final String hilt = "2.28-alpha"
 
         static final class androidx {
             static final String coreKtx = "1.3.0"
@@ -63,7 +63,13 @@ final class Deps {
 
     static final String material = "com.google.android.material:material:$versions.material"
     static final String timber = "com.jakewharton.timber:timber:$versions.timber"
-    public static final String agp = "${SdkConstants.GRADLE_PLUGIN_NAME}${versions.agp}"
+    static final String agp = "${SdkConstants.GRADLE_PLUGIN_NAME}${versions.agp}"
+
+    static final class hilt {
+        static final String plugin = "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt"
+        static final String core = "com.google.dagger:hilt-android:$versions.hilt"
+        static final String compiler = "com.google.dagger:hilt-android-compiler:$versions.hilt"
+    }
 
     static final class test {
         static final String junit = "junit:junit:$versions.test.junit"

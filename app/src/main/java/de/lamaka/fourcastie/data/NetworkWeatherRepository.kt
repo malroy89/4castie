@@ -5,8 +5,11 @@ import de.lamaka.fourcastie.domain.model.Weather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.RuntimeException
+import javax.inject.Inject
 
-class NetworkWeatherRepository(private val apiService: OpenWeatherApiService) : WeatherRepository {
+class NetworkWeatherRepository @Inject constructor(
+    private val apiService: OpenWeatherApiService
+) : WeatherRepository {
 
     // Coroutines Flow?
     override suspend fun loadForCity(name: String): Weather {

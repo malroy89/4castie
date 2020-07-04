@@ -3,35 +3,19 @@ package de.lamaka.fourcastie.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.data.NetworkWeatherRepository
-import de.lamaka.fourcastie.data.OpenWeatherApiService
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
+import javax.inject.Inject
 
-const val BASE_URL = "https://api.openweathermap.org"
+@AndroidEntryPoint
+class HomeFragment /*@Inject constructor(
+    private val viewModel: HomeViewModel
+)*/ : Fragment(R.layout.fragment_home) {
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
-
-    private val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-        override fun log(message: String) {
-            Timber.tag("OkHttp").d(message)
-        }
-    }).apply { level = HttpLoggingInterceptor.Level.BODY  }
-    private val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val viewModel: HomeViewModel = HomeViewModel(
-        NetworkWeatherRepository(retrofit.create(OpenWeatherApiService::class.java))
-    )
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

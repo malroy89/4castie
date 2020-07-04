@@ -3,6 +3,8 @@ import de.lamaka.fourcastie.Deps
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 Properties props = new Properties()
 def propsFile = rootProject.file("local.properties")
@@ -21,6 +23,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String", "API_BASE_URL", "\"https://api.openweathermap.org\""
         buildConfigField "String", "OPEN_WEATHER_MAP_API_KEY", props.getProperty('OPEN_WEATHER_MAP_API_KEY')
     }
 
@@ -34,6 +37,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -55,6 +62,13 @@ dependencies {
     implementation Deps.okhttp.loggingInterceptor
 
     implementation Deps.timber
+
+    implementation Deps.hilt.core
+    kapt Deps.hilt.compiler
+
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
+    // When using Kotlin.
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
 
     testImplementation Deps.test.junit
     androidTestImplementation Deps.test.androidx.junit
