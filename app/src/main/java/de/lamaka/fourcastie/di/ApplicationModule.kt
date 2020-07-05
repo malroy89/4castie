@@ -1,19 +1,26 @@
 package de.lamaka.fourcastie.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import androidx.preference.PreferenceManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import de.lamaka.fourcastie.BuildConfig
 import de.lamaka.fourcastie.InjectFragmentFactory
 import de.lamaka.fourcastie.data.NetworkWeatherRepository
 import de.lamaka.fourcastie.data.OpenWeatherApiService
+import de.lamaka.fourcastie.data.UnitSettingInterceptor
+import de.lamaka.fourcastie.domain.SettingsStorage
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.home.HomeFragment
+import de.lamaka.fourcastie.settings.SettingsFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,15 +33,18 @@ object ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(unitSettingInterceptor: UnitSettingInterceptor): OkHttpClient {
         return if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(unitSettingInterceptor)
                 .build()
         } else {
-            OkHttpClient.Builder().build()
+            OkHttpClient.Builder()
+                .addInterceptor(unitSettingInterceptor)
+                .build()
         }
     }
 
@@ -55,6 +65,11 @@ object ApplicationModule {
     fun provideOpenWeatherApiService(retrofit: Retrofit): OpenWeatherApiService =
         retrofit.create(OpenWeatherApiService::class.java)
 
+    @SettingsSharedPrefs
+    @Provides
+    fun provideSettingsSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
+
 }
 
 @Module
@@ -70,8 +85,8 @@ abstract class FragmentBindingModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(HomeFragment::class)
-    abstract fun bindHomeFragment(homeFragment: HomeFragment): Fragment
+    @FragmentKey(SettingsFragment::class)
+    abstract fun bindSettingsFragment(homeFragment: SettingsFragment): Fragment
 
     @Binds
     abstract fun bindFragmentFactory(factory: InjectFragmentFactory): FragmentFactory

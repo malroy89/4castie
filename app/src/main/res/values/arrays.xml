@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unit_names_array">
+        <item>@string/standard_unit_name</item>
+        <item>@string/metric_unit_name</item>
+        <item>@string/imperial_unit_name</item>
+    </string-array>
+
+    <string-array name="unit_values_array">
+        <item>@string/standard_unit_value</item>
+        <item>@string/metric_unit_value</item>
+        <item>@string/imperial_unit_value</item>
+    </string-array>
+</resources>

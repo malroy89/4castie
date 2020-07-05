@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.model.Weather
-import javax.inject.Inject
 
 class HomeViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository

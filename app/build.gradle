@@ -25,6 +25,8 @@ android {
 
         buildConfigField "String", "API_BASE_URL", "\"https://api.openweathermap.org\""
         buildConfigField "String", "OPEN_WEATHER_MAP_API_KEY", props.getProperty('OPEN_WEATHER_MAP_API_KEY')
+
+        resValue "string", "unit_setting_key", "unit_setting_key"
     }
 
     buildTypes {
@@ -52,6 +54,7 @@ dependencies {
     implementation Deps.androidx.navigation.fragment
     implementation Deps.androidx.navigation.uiKtx
     implementation Deps.androidx.constraintLayout
+    implementation Deps.androidx.prefs
 
     implementation Deps.androidx.lifecycle.livedataKtx
 
@@ -66,9 +69,8 @@ dependencies {
     implementation Deps.hilt.core
     kapt Deps.hilt.compiler
 
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
-    // When using Kotlin.
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
+    implementation Deps.androidx.hilt.lifecycleViewModel
+    kapt Deps.androidx.hilt.compiler
 
     testImplementation Deps.test.junit
     androidTestImplementation Deps.test.androidx.junit

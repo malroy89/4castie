@@ -4,7 +4,6 @@ import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.model.Weather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.RuntimeException
 import javax.inject.Inject
 
 class NetworkWeatherRepository @Inject constructor(
@@ -14,7 +13,7 @@ class NetworkWeatherRepository @Inject constructor(
     // Coroutines Flow?
     override suspend fun loadForCity(name: String): Weather {
         return withContext(Dispatchers.IO) {
-            val response = apiService.getWeatherByCityName(name, "metric") // TODO catch anny exception
+            val response = apiService.getWeatherByCityName(name) // TODO catch any exception
             if (!response.isSuccessful) throw RuntimeException()
             val apiWeather = response.body() ?: throw RuntimeException()
             return@withContext Weather(
@@ -27,4 +26,8 @@ class NetworkWeatherRepository @Inject constructor(
             )
         }
     }
+
+
+
+
 }

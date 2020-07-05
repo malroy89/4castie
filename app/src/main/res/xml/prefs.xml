@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="format_category"
+        android:title="Format">
+
+        <ListPreference
+            android:defaultValue="@string/default_unit_value"
+            android:entries="@array/unit_names_array"
+            android:entryValues="@array/unit_values_array"
+            android:icon="@drawable/ic_satellite"
+            android:key="@string/unit_setting_key"
+            android:title="@string/preference_unit_title" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

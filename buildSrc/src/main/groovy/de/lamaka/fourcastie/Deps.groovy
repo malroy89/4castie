@@ -12,6 +12,7 @@ final class Deps {
         static final String timber = "4.7.1"
         static final String okhttp = "4.7.2"
         static final String hilt = "2.28-alpha"
+        static final String prefs = "1.1.0"
 
         static final class androidx {
             static final String coreKtx = "1.3.0"
@@ -19,6 +20,7 @@ final class Deps {
             static final String navigation = "2.3.0"
             static final String constraintLayout = "1.1.3"
             static final String lifecycle = "2.2.0"
+            static final String hilt = "1.0.0-alpha01"
         }
 
         static final class test {
@@ -50,6 +52,7 @@ final class Deps {
         static final String coreKtx = "androidx.core:core-ktx:$versions.androidx.coreKtx"
         static final String appcompat = "androidx.appcompat:appcompat:$versions.androidx.appcompat"
         static final String constraintLayout = "androidx.constraintlayout:constraintlayout:$versions.androidx.constraintLayout"
+        static final String prefs = "androidx.preference:preference:$versions.prefs"
 
         static final class lifecycle {
             static final String livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx.lifecycle"
@@ -58,6 +61,11 @@ final class Deps {
         static final class navigation {
             static final String fragment = "androidx.navigation:navigation-fragment-ktx:$versions.androidx.navigation"
             static final String uiKtx = "androidx.navigation:navigation-ui-ktx:$versions.androidx.navigation"
+        }
+
+        static final class hilt {
+            static final String lifecycleViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$versions.androidx.hilt"
+            static final String compiler = "androidx.hilt:hilt-compiler:$versions.androidx.hilt"
         }
     }
 
