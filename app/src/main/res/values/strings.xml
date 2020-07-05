@@ -15,4 +15,6 @@
     <string name="metric_unit_value" translatable="false">Metric</string>
     <string name="imperial_unit_value" translatable="false">Imperial</string>
 
+    <string name="add_city">Add city</string>
+
 </resources>

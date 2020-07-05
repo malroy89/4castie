@@ -14,9 +14,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import de.lamaka.fourcastie.BuildConfig
 import de.lamaka.fourcastie.InjectFragmentFactory
-import de.lamaka.fourcastie.data.NetworkWeatherRepository
-import de.lamaka.fourcastie.data.OpenWeatherApiService
-import de.lamaka.fourcastie.data.UnitSettingInterceptor
+import de.lamaka.fourcastie.data.*
+import de.lamaka.fourcastie.domain.CityRepository
 import de.lamaka.fourcastie.domain.SettingsStorage
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.home.HomeFragment
@@ -70,6 +69,11 @@ object ApplicationModule {
     fun provideSettingsSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
+    @CityStorageSharedPrefs
+    @Provides
+    fun provideCityStorageSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
+
 }
 
 @Module
@@ -77,6 +81,9 @@ object ApplicationModule {
 abstract class WeatherRepositoryModule {
     @Binds
     abstract fun bindWeatherRepository(repo: NetworkWeatherRepository): WeatherRepository
+
+    @Binds
+    abstract fun bindCityRepository(repo: SharedPrefsCityRepository): CityRepository
 }
 
 @Module

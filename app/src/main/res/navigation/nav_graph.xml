@@ -19,9 +19,16 @@
         <action
             android:id="@+id/action_citiesFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_citiesFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="de.lamaka.fourcastie.settings.SettingsFragment"
         android:label="Settings" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="de.lamaka.fourcastie.search.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

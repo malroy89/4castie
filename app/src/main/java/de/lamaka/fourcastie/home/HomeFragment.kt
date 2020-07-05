@@ -8,25 +8,25 @@ import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment /*@Inject constructor(
-    private val viewModel: HomeViewModel
-)*/ : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(viewLifecycleOwner, Observer { render(it) })
-        viewModel.handle(Action.LoadWeatherForCity("berlin"))
+//        viewModel.handle(Action.LoadWeatherForCity("berlin"))
     }
 
-    private fun render(viewState: ViewState) {
-        when (viewState) {
-            is ViewState.Loading -> Timber.d("Loading state")
-            is ViewState.WeatherLoaded -> Timber.d("Weather loaded ${viewState.weather}")
+    private fun render(viewState: HomeViewState) {
+        if (viewState.loading) {
+            Timber.d("Loading state")
+        }
+
+        if (viewState.weather != null) {
+            Timber.d("Weather loaded ${viewState.weather}")
         }
     }
 }

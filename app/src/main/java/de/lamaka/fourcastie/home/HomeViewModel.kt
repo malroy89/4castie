@@ -1,38 +1,31 @@
 package de.lamaka.fourcastie.home
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.liveData
+import de.lamaka.fourcastie.base.BaseViewModel
 import de.lamaka.fourcastie.domain.WeatherRepository
-import de.lamaka.fourcastie.domain.model.Weather
 
 class HomeViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository
-) : ViewModel() {
+) : BaseViewModel<HomeAction, HomeViewState, HomeResult>(HomeAction.LoadWeatherForLocation) {
 
-    private val nextAction = MutableLiveData<Action>()
-
-    val viewState: LiveData<ViewState> = Transformations.switchMap(nextAction) { action ->
-        liveData {
-            when (action) {
-                is Action.LoadWeatherForCity -> {
-                    emit(ViewState.Loading)
-                    emit(ViewState.WeatherLoaded(weatherRepository.loadForCity(action.cityName)))
-                }
+    override fun perform(action: HomeAction) = liveData {
+        when (action) {
+            is HomeAction.LoadWeatherForCity -> {
+                emit(HomeResult.Loading)
+                emit(HomeResult.WeatherLoaded(weatherRepository.loadForCity(action.cityName)))
             }
         }
     }
 
-    fun handle(action: Action) {
-        nextAction.value = action
+    override var currentState: HomeViewState = HomeViewState()
+
+    override fun reduce(result: HomeResult): HomeViewState {
+        return when (result) {
+            HomeResult.Loading -> currentState.copy(loading = true)
+            is HomeResult.WeatherLoaded -> currentState.copy(loading = false, weather = result.weather)
+        }
     }
 
 }
 
-sealed class Action {
-    data class LoadWeatherForCity(val cityName: String) : Action()
-}
-
-sealed class ViewState {
-    object Loading : ViewState()
-    data class WeatherLoaded(val weather: Weather) : ViewState()
-}
