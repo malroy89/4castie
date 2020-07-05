@@ -13,10 +13,12 @@ abstract class BaseViewModel<A : Action, VS : ViewState, R : Result> constructor
     private val nextAction = MutableLiveData(initAction)
 
     val viewState: LiveData<VS> =
-        Transformations.map(Transformations.switchMap(nextAction) { perform(it) }) {
-            currentState = reduce(it)
-            currentState
-        }
+        Transformations.distinctUntilChanged(
+            Transformations.map(Transformations.switchMap(nextAction) { perform(it) }) {
+                currentState = reduce(it)
+                currentState
+            }
+        )
 
     fun handle(action: A) {
         nextAction.value = action

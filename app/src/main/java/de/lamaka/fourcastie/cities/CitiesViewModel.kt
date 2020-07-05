@@ -21,6 +21,7 @@ class CitiesViewModel @ViewModelInject constructor(
                 val cities = cityRepository.getAllCities()
                 emit(CitiesResult.Loaded(cities))
             }
+            CitiesAction.AddCityCancel -> emit(CitiesResult.AddCityCancelled)
         }
     }
 
@@ -30,6 +31,7 @@ class CitiesViewModel @ViewModelInject constructor(
         return when (result) {
             is CitiesResult.Loaded -> currentState.copy(addCity = false, cities = result.cities)
             CitiesResult.AddCity -> currentState.copy(addCity = true)
+            CitiesResult.AddCityCancelled -> currentState.copy(addCity = false)
         }
     }
 
