@@ -17,4 +17,19 @@
 
     <string name="add_city">Add city</string>
 
+    <string name="error_occurred">Oops! An error occurred. \n\n Please check your internet connection.
+        \n\n Swipe down to retry.</string>
+    <string name="loading_text">Fetching weather</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind speed</string>
+
+    <!-- Units -->
+    <string name="label_speed_imperial">%1$.1f miles\\hour</string>
+    <string name="label_speed_metric_standard">%1$.1f meter\\sec</string>
+    <string name="label_temperature_imperial">%1$d \u2109</string>
+    <string name="label_temperature_metric">%1$d \u2103</string>
+    <string name="label_temperature_standard">%1$d \u212A</string>
+    <string name="label_humidity">%1$d%%</string>
+    <string name="label_pressure">%1$d hPa</string>
 </resources>

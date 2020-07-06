@@ -7,31 +7,31 @@ import de.lamaka.fourcastie.domain.CityRepository
 
 class CitiesViewModel @ViewModelInject constructor(
     private val cityRepository: CityRepository
-) : BaseViewModel<CitiesAction, CitiesViewState, CitiesResult>(CitiesAction.Load) {
+) : BaseViewModel<CitiesAction, CitiesViewState, CitiesActionResult>(CitiesAction.Load) {
 
     override fun perform(action: CitiesAction) = liveData {
         when (action) {
             CitiesAction.Load -> {
                 val cities = cityRepository.getAllCities()
-                emit(CitiesResult.Loaded(cities))
+                emit(CitiesActionResult.Loaded(cities))
             }
-            CitiesAction.AddCity -> emit(CitiesResult.AddCity)
+            CitiesAction.AddCity -> emit(CitiesActionResult.AddCity)
             is CitiesAction.FinishAdding -> {
                 cityRepository.saveCity(action.cityName)
                 val cities = cityRepository.getAllCities()
-                emit(CitiesResult.Loaded(cities))
+                emit(CitiesActionResult.Loaded(cities))
             }
-            CitiesAction.AddCityCancel -> emit(CitiesResult.AddCityCancelled)
+            CitiesAction.AddCityCancel -> emit(CitiesActionResult.AddCityCancelled)
         }
     }
 
     override var currentState: CitiesViewState = CitiesViewState()
 
-    override fun reduce(result: CitiesResult): CitiesViewState {
+    override fun reduce(result: CitiesActionResult): CitiesViewState {
         return when (result) {
-            is CitiesResult.Loaded -> currentState.copy(addCity = false, cities = result.cities)
-            CitiesResult.AddCity -> currentState.copy(addCity = true)
-            CitiesResult.AddCityCancelled -> currentState.copy(addCity = false)
+            is CitiesActionResult.Loaded -> currentState.copy(addCity = false, cities = result.cities)
+            CitiesActionResult.AddCity -> currentState.copy(addCity = true)
+            CitiesActionResult.AddCityCancelled -> currentState.copy(addCity = false)
         }
     }
 

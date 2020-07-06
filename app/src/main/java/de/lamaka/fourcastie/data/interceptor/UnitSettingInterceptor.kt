@@ -1,11 +1,10 @@
-package de.lamaka.fourcastie.data
+package de.lamaka.fourcastie.data.interceptor
 
 import de.lamaka.fourcastie.domain.SettingsStorage
+import de.lamaka.fourcastie.domain.UnitSystem
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class UnitSettingInterceptor @Inject constructor(
@@ -14,15 +13,10 @@ class UnitSettingInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originRequest = chain.request()
-        val selectedUnit = settingsStorage.getSelectedUnit()
-        val newRequest = when (selectedUnit.toLowerCase(Locale.ENGLISH)) {
-            "metric" -> buildNewRequest(originRequest, "metric")
-            "imperial" -> buildNewRequest(originRequest, "imperial")
-            "standard" -> originRequest
-            else -> {
-                Timber.d("An unexpected unit-value \"$selectedUnit\" came from settings. Falling back to \"standard\" unit")
-                originRequest
-            }
+        val newRequest = when (settingsStorage.getSelectedUnit()) {
+            UnitSystem.METRIC -> buildNewRequest(originRequest, "metric")
+            UnitSystem.IMPERIAL -> buildNewRequest(originRequest, "imperial")
+            UnitSystem.STANDARD -> originRequest
         }
         return chain.proceed(newRequest)
     }

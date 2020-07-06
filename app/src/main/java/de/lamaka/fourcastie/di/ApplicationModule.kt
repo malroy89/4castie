@@ -14,14 +14,22 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import de.lamaka.fourcastie.BuildConfig
 import de.lamaka.fourcastie.InjectFragmentFactory
-import de.lamaka.fourcastie.data.*
+import de.lamaka.fourcastie.city.WeatherView
+import de.lamaka.fourcastie.data.NetworkWeatherRepository
+import de.lamaka.fourcastie.data.OpenWeatherApiService
+import de.lamaka.fourcastie.data.SharedPrefsCityRepository
+import de.lamaka.fourcastie.data.interceptor.ApiKeyInterceptor
+import de.lamaka.fourcastie.data.interceptor.ApiRequestInterceptor
+import de.lamaka.fourcastie.data.interceptor.UnitSettingInterceptor
+import de.lamaka.fourcastie.data.mapper.Mapper
+import de.lamaka.fourcastie.data.mapper.WeatherToViewMapper
 import de.lamaka.fourcastie.domain.CityRepository
-import de.lamaka.fourcastie.domain.SettingsStorage
 import de.lamaka.fourcastie.domain.WeatherRepository
-import de.lamaka.fourcastie.home.HomeFragment
+import de.lamaka.fourcastie.domain.model.Weather
 import de.lamaka.fourcastie.settings.SettingsFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -32,19 +40,19 @@ object ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(unitSettingInterceptor: UnitSettingInterceptor): OkHttpClient {
-        return if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .addInterceptor(unitSettingInterceptor)
-                .build()
-        } else {
-            OkHttpClient.Builder()
-                .addInterceptor(unitSettingInterceptor)
-                .build()
+    fun provideOkHttpClient(
+        apiRequestInterceptor: ApiRequestInterceptor,
+        apiKeyInterceptor: ApiKeyInterceptor,
+        unitSettingInterceptor: UnitSettingInterceptor
+    ): OkHttpClient {
+        val okHttpBuilder = OkHttpClient.Builder()
+            .addInterceptor(apiRequestInterceptor)
+            .addInterceptor(unitSettingInterceptor)
+            .addInterceptor(apiKeyInterceptor)
+        if (BuildConfig.DEBUG) {
+            okHttpBuilder.addInterceptor(HttpLoggingInterceptor().apply { level = Level.BODY })
         }
+        return okHttpBuilder.build()
     }
 
     @Provides
@@ -73,7 +81,6 @@ object ApplicationModule {
     @Provides
     fun provideCityStorageSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
-
 }
 
 @Module
@@ -84,6 +91,13 @@ abstract class WeatherRepositoryModule {
 
     @Binds
     abstract fun bindCityRepository(repo: SharedPrefsCityRepository): CityRepository
+}
+
+@Module
+@InstallIn(ApplicationComponent::class)
+abstract class MapperModule {
+    @Binds
+    abstract fun bindWeatherToWeatherViewMapper(mapper: WeatherToViewMapper): Mapper<Weather, WeatherView>
 }
 
 @Module

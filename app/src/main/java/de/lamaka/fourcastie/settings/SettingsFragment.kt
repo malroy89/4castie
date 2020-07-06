@@ -8,13 +8,19 @@ import androidx.preference.PreferenceFragmentCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.lamaka.fourcastie.R
 import de.lamaka.fourcastie.domain.SettingsStorage
+import de.lamaka.fourcastie.domain.UnitSystem
 import javax.inject.Inject
 
 class SettingsFragment @Inject constructor(
     @ApplicationContext context: Context,
     private val settingsStorage: SettingsStorage
-) : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+) : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private val labelsMap = mapOf(
+        UnitSystem.STANDARD to context.getString(R.string.standard_unit_value),
+        UnitSystem.IMPERIAL to context.getString(R.string.imperial_unit_value),
+        UnitSystem.METRIC to context.getString(R.string.metric_unit_value)
+    )
 
     private val unitPrefId = context.getString(R.string.unit_setting_key)
     private var unitPref: Preference? = null
@@ -23,7 +29,7 @@ class SettingsFragment @Inject constructor(
         setPreferencesFromResource(R.xml.prefs, rootKey)
 
         unitPref = findPreference(unitPrefId)
-        unitPref?.summary = settingsStorage.getSelectedUnit()
+        unitPref?.summary = labelsMap.getValue(settingsStorage.getSelectedUnit())
     }
 
     override fun onResume() {
@@ -43,7 +49,7 @@ class SettingsFragment @Inject constructor(
     }
 
     private fun onUnitPrefChanged() {
-        unitPref?.summary = settingsStorage.getSelectedUnit()
+        unitPref?.summary = labelsMap.getValue(settingsStorage.getSelectedUnit())
     }
 
 }

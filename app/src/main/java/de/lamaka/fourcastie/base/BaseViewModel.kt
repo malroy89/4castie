@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
-abstract class BaseViewModel<A : Action, VS : ViewState, R : Result> constructor(
+abstract class BaseViewModel<A : Action, VS : ViewState, AR : ActionResult> constructor(
     initAction: A
 ) : ViewModel() {
 
@@ -24,6 +24,6 @@ abstract class BaseViewModel<A : Action, VS : ViewState, R : Result> constructor
         nextAction.value = action
     }
 
-    protected abstract fun perform(action: A): LiveData<R>
-    protected abstract fun reduce(result: R): VS
+    protected abstract fun perform(action: A): LiveData<AR>
+    protected abstract fun reduce(result: AR): VS
 }

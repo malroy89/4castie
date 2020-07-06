@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_citiesFragment_to_addCityFragment"
             app:destination="@id/addCity" />
+        <action
+            android:id="@+id/action_citiesFragment_to_cityFragment"
+            app:destination="@id/cityFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -31,4 +34,13 @@
         android:id="@+id/addCity"
         android:name="de.lamaka.fourcastie.add_city.AddCityFragment"
         android:label="AddCityFragment" />
+    <fragment
+        android:id="@+id/cityFragment"
+        android:name="de.lamaka.fourcastie.city.CityFragment"
+        android:label="CityFragment">
+        <argument
+            android:name="cityName"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 </navigation>

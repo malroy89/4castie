@@ -13,6 +13,8 @@ final class Deps {
         static final String okhttp = "4.7.2"
         static final String hilt = "2.28-alpha"
         static final String prefs = "1.1.0"
+        static final String swipeRefreshLayout = "1.1.0"
+        static final String weatherIconView = "1.1.0"
 
         static final class androidx {
             static final String coreKtx = "1.3.0"
@@ -53,6 +55,7 @@ final class Deps {
         static final String appcompat = "androidx.appcompat:appcompat:$versions.androidx.appcompat"
         static final String constraintLayout = "androidx.constraintlayout:constraintlayout:$versions.androidx.constraintLayout"
         static final String prefs = "androidx.preference:preference:$versions.prefs"
+        static final String swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swipeRefreshLayout"
 
         static final class lifecycle {
             static final String livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx.lifecycle"
@@ -61,6 +64,7 @@ final class Deps {
         static final class navigation {
             static final String fragment = "androidx.navigation:navigation-fragment-ktx:$versions.androidx.navigation"
             static final String uiKtx = "androidx.navigation:navigation-ui-ktx:$versions.androidx.navigation"
+            static final String safeArgsPlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.androidx.navigation"
         }
 
         static final class hilt {
@@ -72,6 +76,7 @@ final class Deps {
     static final String material = "com.google.android.material:material:$versions.material"
     static final String timber = "com.jakewharton.timber:timber:$versions.timber"
     static final String agp = "${SdkConstants.GRADLE_PLUGIN_NAME}${versions.agp}"
+    static final String weatherIconView = "com.github.pwittchen:weathericonview:$versions.weatherIconView"
 
     static final class hilt {
         static final String plugin = "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt"

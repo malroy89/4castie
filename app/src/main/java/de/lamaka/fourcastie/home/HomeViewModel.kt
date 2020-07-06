@@ -7,23 +7,23 @@ import de.lamaka.fourcastie.domain.WeatherRepository
 
 class HomeViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository
-) : BaseViewModel<HomeAction, HomeViewState, HomeResult>(HomeAction.LoadWeatherForLocation) {
+) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(HomeAction.LoadWeatherForLocation) {
 
     override fun perform(action: HomeAction) = liveData {
         when (action) {
             is HomeAction.LoadWeatherForCity -> {
-                emit(HomeResult.Loading)
-                emit(HomeResult.WeatherLoaded(weatherRepository.loadForCity(action.cityName)))
+                emit(HomeActionResult.Loading)
+                emit(HomeActionResult.WeatherLoaded(weatherRepository.loadForCity(action.cityName)))
             }
         }
     }
 
     override var currentState: HomeViewState = HomeViewState()
 
-    override fun reduce(result: HomeResult): HomeViewState {
+    override fun reduce(result: HomeActionResult): HomeViewState {
         return when (result) {
-            HomeResult.Loading -> currentState.copy(loading = true)
-            is HomeResult.WeatherLoaded -> currentState.copy(loading = false, weather = result.weather)
+            HomeActionResult.Loading -> currentState.copy(loading = true)
+            is HomeActionResult.WeatherLoaded -> currentState.copy(loading = false, weather = result.weather)
         }
     }
 

@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 Properties props = new Properties()
 def propsFile = rootProject.file("local.properties")
@@ -55,6 +56,7 @@ dependencies {
     implementation Deps.androidx.navigation.uiKtx
     implementation Deps.androidx.constraintLayout
     implementation Deps.androidx.prefs
+    implementation Deps.androidx.swipeRefreshLayout
 
     implementation Deps.androidx.lifecycle.livedataKtx
 
@@ -71,6 +73,8 @@ dependencies {
 
     implementation Deps.androidx.hilt.lifecycleViewModel
     kapt Deps.androidx.hilt.compiler
+
+    implementation Deps.weatherIconView
 
     testImplementation Deps.test.junit
     androidTestImplementation Deps.test.androidx.junit

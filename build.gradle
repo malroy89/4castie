@@ -9,6 +9,7 @@ buildscript {
         classpath Deps.agp
         classpath Deps.kotlin.plugin
         classpath Deps.hilt.plugin
+        classpath Deps.androidx.navigation.safeArgsPlugin
     }
 }
 
