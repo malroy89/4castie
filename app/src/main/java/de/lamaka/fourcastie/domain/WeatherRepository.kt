@@ -6,4 +6,7 @@ interface WeatherRepository {
 
     @Throws(WeatherRepositoryException::class)
     suspend fun loadForCity(name: String): Weather
+
+    @Throws(WeatherRepositoryException::class)
+    suspend fun loadForLocation(lat: Double, lng: Double): Weather
 }

@@ -23,6 +23,8 @@ final class Deps {
             static final String constraintLayout = "1.1.3"
             static final String lifecycle = "2.2.0"
             static final String hilt = "1.0.0-alpha01"
+            static final String activityKtx = "1.2.0-alpha02"
+            static final String fragmentKtx = "1.3.0-alpha02"
         }
 
         static final class test {
@@ -56,6 +58,8 @@ final class Deps {
         static final String constraintLayout = "androidx.constraintlayout:constraintlayout:$versions.androidx.constraintLayout"
         static final String prefs = "androidx.preference:preference:$versions.prefs"
         static final String swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swipeRefreshLayout"
+        static final String activityKtx = "androidx.activity:activity-ktx:$versions.androidx.activityKtx"
+        static final String fragmentKtx = "androidx.fragment:fragment-ktx:$versions.androidx.fragmentKtx"
 
         static final class lifecycle {
             static final String livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx.lifecycle"

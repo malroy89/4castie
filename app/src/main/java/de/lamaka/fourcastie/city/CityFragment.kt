@@ -13,6 +13,7 @@ import com.github.pwittchen.weathericonview.WeatherIconView
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
 import de.lamaka.fourcastie.misc.showIcon
+import de.lamaka.fourcastie.ui.WeatherDetailsView
 
 // TODO make home fragment as a container of a Bottom Nav, in order to make CityFragment fullscreen
 // TODO consider usage of ViewBinding
@@ -23,16 +24,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
     private val args: CityFragmentArgs by navArgs()
 
     private var swipeToRefresh: SwipeRefreshLayout? = null
-    private var weatherIn: TextView? = null
-    private var date: TextView? = null
-    private var weatherIcon: WeatherIconView? = null
-    private var temperature: TextView? = null
-    private var description: TextView? = null
-    private var humidity: TextView? = null
-    private var pressure: TextView? = null
-    private var wind: TextView? = null
-    private var weatherDetails: View? = null
-
+    private var weatherDetails: WeatherDetailsView? = null
     private var progress: ProgressBar? = null
 
     private var error: TextView? = null
@@ -46,17 +38,9 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             swipeToRefresh?.isRefreshing = false
         }
 
-        weatherIn = view.findViewById(R.id.weather_in_text)
-        date = view.findViewById(R.id.date_text)
         progress = view.findViewById(R.id.progressBar)
-        weatherIcon = view.findViewById(R.id.weather_icon)
-        temperature = view.findViewById(R.id.weather_temperature)
-        description = view.findViewById(R.id.weather_main)
         error = view.findViewById(R.id.error_text)
-        humidity = view.findViewById(R.id.humidity_text)
-        pressure = view.findViewById(R.id.pressure_text)
-        wind = view.findViewById(R.id.wind_speed_text)
-        weatherDetails = view.findViewById(R.id.weather_det)
+        weatherDetails = view.findViewById(R.id.weather_details)
 
         viewModel.viewState.observe(viewLifecycleOwner) { render(it) }
     }

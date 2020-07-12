@@ -1,6 +1,7 @@
 package de.lamaka.fourcastie.data
 
 import de.lamaka.fourcastie.data.ApiRequestException.Type
+import de.lamaka.fourcastie.data.model.ApiWeather
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
 import de.lamaka.fourcastie.domain.WeatherRepositoryException.Error
@@ -20,20 +21,33 @@ class NetworkWeatherRepository @Inject constructor(
 ) : WeatherRepository {
 
     override suspend fun loadForCity(name: String): Weather {
+        return loadWeather { apiService.getWeatherByCityName(name) }
+    }
+
+    override suspend fun loadForLocation(lat: Double, lng: Double): Weather {
+        return loadWeather { apiService.getWeatherByLocation(lat, lng) }
+    }
+
+    private suspend fun loadWeather(apiCall: suspend () -> ApiWeather): Weather {
         return withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.getWeatherByCityName(name)
-                return@withContext Weather(
-                    response.name,
-                    response.apiWeatherDetails.first().main, // refactor
-                    response.wind.speed,
-                    response.apiWeatherCondition.temp,
-                    response.apiWeatherCondition.pressure,
-                    response.apiWeatherCondition.humidity
-                )
-            } catch (e: ApiRequestException) {
-                throw WeatherRepositoryException(ERROR_MAPPING[e.type] ?: Error.INTERNAL_ERROR)
-            }
+            performSafeCall { apiCall.invoke() }
+                .let { weather ->  Weather(
+                    weather.name,
+                    weather.apiWeatherDetails.first().main, // refactor
+                    weather.wind.speed,
+                    weather.apiWeatherCondition.temp,
+                    weather.apiWeatherCondition.feelsLike,
+                    weather.apiWeatherCondition.pressure,
+                    weather.apiWeatherCondition.humidity
+                ) }
+        }
+    }
+
+    private suspend fun <T> performSafeCall(apiCall: suspend () -> T): T {
+        return try {
+            apiCall()
+        } catch (e: ApiRequestException) {
+            throw WeatherRepositoryException(ERROR_MAPPING[e.type] ?: Error.INTERNAL_ERROR)
         }
     }
 

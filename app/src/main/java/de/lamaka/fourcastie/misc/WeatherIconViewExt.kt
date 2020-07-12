@@ -5,7 +5,6 @@ import com.github.pwittchen.weathericonview.WeatherIconView
 import de.lamaka.fourcastie.R
 
 fun WeatherIconView.showIcon(condition: String?) {
-    val context = this.context
     getIconResources(context, this, condition)
 }
 

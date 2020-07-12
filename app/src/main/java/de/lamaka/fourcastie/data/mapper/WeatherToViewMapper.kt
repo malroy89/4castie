@@ -33,6 +33,7 @@ class WeatherToViewMapper @Inject constructor(
             city = from.cityName,
             description = from.description,
             temperature = tempMapping.getValue(unitSystem).invoke(from.temperature),
+            feelsLikeTemperature = context.getString(R.string.label_feels_like, tempMapping.getValue(unitSystem).invoke(from.temperatureFeelsLike)),
             humidity = context.getString(R.string.label_humidity, from.humidity.toInt()),
             pressure = context.getString(R.string.label_pressure, from.pressure.toInt()),
             windSpeed = speedMapping.getValue(unitSystem).invoke(from.windSpeed)

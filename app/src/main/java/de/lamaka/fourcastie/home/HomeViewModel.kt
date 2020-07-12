@@ -3,17 +3,58 @@ package de.lamaka.fourcastie.home
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.liveData
 import de.lamaka.fourcastie.base.BaseViewModel
+import de.lamaka.fourcastie.city.WeatherView
+import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepository
+import de.lamaka.fourcastie.domain.WeatherRepositoryException
+import de.lamaka.fourcastie.domain.location.LocationDetector
+import de.lamaka.fourcastie.domain.location.MissingLocationPermissionException
+import de.lamaka.fourcastie.domain.location.UserLocation
+import de.lamaka.fourcastie.domain.model.Weather
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class HomeViewModel @ViewModelInject constructor(
-    private val weatherRepository: WeatherRepository
-) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(HomeAction.LoadWeatherForLocation) {
+    private val locationDetector: LocationDetector,
+    private val weatherRepository: WeatherRepository,
+    private val mapper: Mapper<Weather, WeatherView>
+) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(HomeAction.LoadWeatherForCurrentPosition) {
 
     override fun perform(action: HomeAction) = liveData {
         when (action) {
-            is HomeAction.LoadWeatherForCity -> {
+            is HomeAction.LoadWeatherForCurrentPosition -> {
                 emit(HomeActionResult.Loading)
-                emit(HomeActionResult.WeatherLoaded(weatherRepository.loadForCity(action.cityName)))
+                emit(loadWeatherForCurrentLocation())
+            }
+            is HomeAction.PermissionsResolved -> {
+                if (action.allPermissionsGiven) {
+                    emit(HomeActionResult.Loading)
+                    emit(loadWeatherForCurrentLocation())
+                } else {
+                    emit(HomeActionResult.FailedToLoadWeather("No permissions to detect your location"))
+                }
+            }
+        }
+    }
+
+    private suspend fun loadWeatherForCurrentLocation(): HomeActionResult {
+        return withContext(Dispatchers.IO) {
+            val location: UserLocation?
+            try {
+                location = locationDetector.getNetworkProvidedLocation() ?: locationDetector.getGpsProvidedLocation()
+            } catch (e: MissingLocationPermissionException) {
+                return@withContext HomeActionResult.MissingPermission(e.missingPermissions)
+            }
+
+            if (location == null) {
+                return@withContext HomeActionResult.FailedToLoadWeather("Failed to detect location")
+            }
+
+            return@withContext try {
+                val weather = weatherRepository.loadForLocation(location.latitude, location.longitude)
+                HomeActionResult.WeatherLoaded(weather)
+            } catch (e: WeatherRepositoryException) {
+                HomeActionResult.FailedToLoadWeather(e.error.message)
             }
         }
     }
@@ -23,7 +64,23 @@ class HomeViewModel @ViewModelInject constructor(
     override fun reduce(result: HomeActionResult): HomeViewState {
         return when (result) {
             HomeActionResult.Loading -> currentState.copy(loading = true)
-            is HomeActionResult.WeatherLoaded -> currentState.copy(loading = false, weather = result.weather)
+            is HomeActionResult.WeatherLoaded -> currentState.copy(
+                loading = false,
+                error = null,
+                weather = mapper.map(result.weather),
+                missingPermissions = emptyList()
+            )
+            is HomeActionResult.FailedToLoadWeather -> currentState.copy(
+                loading = false,
+                error = result.message,
+                weather = null,
+                missingPermissions = emptyList()
+            )
+            is HomeActionResult.MissingPermission -> currentState.copy(
+                loading = false,
+                error = null,
+                missingPermissions = result.permissions
+            )
         }
     }
 

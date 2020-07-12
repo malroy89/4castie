@@ -57,6 +57,8 @@ dependencies {
     implementation Deps.androidx.constraintLayout
     implementation Deps.androidx.prefs
     implementation Deps.androidx.swipeRefreshLayout
+    implementation Deps.androidx.activityKtx
+    implementation Deps.androidx.fragmentKtx
 
     implementation Deps.androidx.lifecycle.livedataKtx
 

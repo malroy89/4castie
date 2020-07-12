@@ -16,5 +16,5 @@ interface OpenWeatherApiService {
     suspend fun getWeatherByLocation(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double
-    ): Response<ApiWeather>
+    ): ApiWeather
 }
