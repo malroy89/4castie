@@ -6,8 +6,6 @@ import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
 import de.lamaka.fourcastie.domain.WeatherRepositoryException.Error
 import de.lamaka.fourcastie.domain.model.Weather
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 private val ERROR_MAPPING = mapOf(
@@ -29,9 +27,9 @@ class NetworkWeatherRepository @Inject constructor(
     }
 
     private suspend fun loadWeather(apiCall: suspend () -> ApiWeather): Weather {
-        return withContext(Dispatchers.IO) {
-            performSafeCall { apiCall.invoke() }
-                .let { weather ->  Weather(
+        return performSafeCall { apiCall.invoke() }
+            .let { weather ->
+                Weather(
                     weather.name,
                     weather.apiWeatherDetails.first().main, // refactor
                     weather.wind.speed,
@@ -39,8 +37,8 @@ class NetworkWeatherRepository @Inject constructor(
                     weather.apiWeatherCondition.feelsLike,
                     weather.apiWeatherCondition.pressure,
                     weather.apiWeatherCondition.humidity
-                ) }
-        }
+                )
+            }
     }
 
     private suspend fun <T> performSafeCall(apiCall: suspend () -> T): T {

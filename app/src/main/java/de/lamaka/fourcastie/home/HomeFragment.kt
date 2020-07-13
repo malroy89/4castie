@@ -83,8 +83,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun renderError(message: String) {
-        error?.visibility = View.VISIBLE
         error?.text = message
+        error?.visibility = View.VISIBLE
 
         progress?.visibility = View.GONE
         weatherDetails?.visibility = View.GONE

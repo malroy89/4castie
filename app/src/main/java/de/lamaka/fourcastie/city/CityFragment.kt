@@ -9,14 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.github.pwittchen.weathericonview.WeatherIconView
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.misc.showIcon
 import de.lamaka.fourcastie.ui.WeatherDetailsView
 
 // TODO make home fragment as a container of a Bottom Nav, in order to make CityFragment fullscreen
-// TODO consider usage of ViewBinding
 @AndroidEntryPoint
 class CityFragment : Fragment(R.layout.fragment_city) {
 
@@ -46,7 +43,14 @@ class CityFragment : Fragment(R.layout.fragment_city) {
     }
 
     private fun render(state: CityViewState) {
-        if (state.isEmpty()) { // a bit hacky :), but for now let's consider that isEmpty means that the fragment has been just initialized
+        when (state) {
+            CityViewState.Init -> viewModel.handle(CityAction.Load(args.cityName))
+            CityViewState.Loading -> renderLoading()
+            is CityViewState.Error -> renderError(state.message)
+            is CityViewState.Loaded -> renderWeather(state.weatherView)
+        }
+
+        /*if (state.isEmpty()) { // a bit hacky :), but for now let's consider that isEmpty means that the fragment has been just initialized
             viewModel.handle(CityAction.Load(args.cityName))
             return
         }
@@ -61,43 +65,26 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             error?.visibility = View.GONE
         }
 
-        handleWeather(state.weather)
+        handleWeather(state.weather)*/
     }
 
-    private fun handleWeather(weather: WeatherView?) {
-        if (weather == null) {
-            weatherIn?.visibility = View.GONE
-            weatherIcon?.visibility = View.GONE
-            temperature?.visibility = View.GONE
-            description?.visibility = View.GONE
-            humidity?.visibility = View.GONE
-            pressure?.visibility = View.GONE
-            wind?.visibility = View.GONE
-            weatherDetails?.visibility = View.GONE
-            return
-        }
+    private fun renderError(message: String) {
+        error?.text = message
+        error?.visibility = View.VISIBLE
+        progress?.visibility = View.GONE
+        weatherDetails?.visibility = View.GONE
+    }
 
-        weatherIn?.text = weather.city
-        weatherIn?.visibility = View.VISIBLE
+    private fun renderLoading() {
+        error?.visibility = View.GONE
+        progress?.visibility = View.VISIBLE
+        weatherDetails?.visibility = View.GONE
+    }
 
-        weatherIcon?.showIcon(weather.description)
-        weatherIcon?.visibility = View.VISIBLE
-
-        temperature?.text = weather.temperature
-        temperature?.visibility = View.VISIBLE
-
-        description?.text = weather.description
-        description?.visibility = View.VISIBLE
-
-        humidity?.text = weather.humidity
-        humidity?.visibility = View.VISIBLE
-
-        pressure?.text = weather.pressure
-        pressure?.visibility = View.VISIBLE
-
-        wind?.text = weather.windSpeed
-        wind?.visibility = View.VISIBLE
-
+    private fun renderWeather(weather: WeatherView) {
+        weatherDetails?.render(weather)
         weatherDetails?.visibility = View.VISIBLE
+        progress?.visibility = View.GONE
+        error?.visibility = View.GONE
     }
 }

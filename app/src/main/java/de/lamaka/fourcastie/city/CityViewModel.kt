@@ -14,16 +14,16 @@ class CityViewModel @ViewModelInject constructor(
     private val mapper: Mapper<Weather, WeatherView>
 ) : BaseViewModel<CityAction, CityViewState, CityActionResult>(CityAction.Init) {
 
-    override var currentState: CityViewState = CityViewState()
+    override var currentState: CityViewState = CityViewState.Init
 
     override fun perform(action: CityAction) = liveData {
         when (action) {
+            CityAction.Init -> {
+                emit(CityActionResult.Init)
+            }
             is CityAction.Load -> {
                 emit(CityActionResult.Loading)
                 emit(loadWeather(action.cityName))
-            }
-            CityAction.Init -> {
-                emit(CityActionResult.Init)
             }
         }
     }
@@ -40,26 +40,15 @@ class CityViewModel @ViewModelInject constructor(
         }
     }
 
-    // TODO to think how to make a composite ViewState which would consist of INIT and RESULT(+ params) types
     override fun reduce(result: CityActionResult): CityViewState {
         return when (result) {
-            CityActionResult.Init -> CityViewState()
-            CityActionResult.Loading -> currentState.copy(
-                loading = true,
-                weather = null,
-                error = null
-            )
-            is CityActionResult.Loaded -> currentState.copy(
-                loading = false,
-                weather = mapper.map(result.weather),
-                error = null
-            )
-            is CityActionResult.FailedToLoad -> currentState.copy(
-                loading = false,
-                weather = null,
-                error = result.message
-            )
+            CityActionResult.Init -> CityViewState.Init
+            CityActionResult.Loading -> CityViewState.Loading
+            is CityActionResult.Loaded -> CityViewState.Loaded(mapper.map(result.weather))
+            is CityActionResult.FailedToLoad -> CityViewState.Error(result.message)
         }
     }
+
+
 
 }

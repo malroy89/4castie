@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import de.lamaka.fourcastie.di.CityStorageSharedPrefs
 import de.lamaka.fourcastie.domain.CityRepository
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 private const val CITIES_KEY = "cities"
@@ -12,6 +13,8 @@ private const val CITY_SEPARATOR = ","
 class SharedPrefsCityRepository @Inject constructor(
     @CityStorageSharedPrefs private val sharedPreferences: SharedPreferences
 ) : CityRepository {
+
+    // TODO make functions main-safe
 
     override suspend fun saveCity(name: String) {
         val currentValue = sharedPreferences.getString(CITIES_KEY, "") ?: ""
