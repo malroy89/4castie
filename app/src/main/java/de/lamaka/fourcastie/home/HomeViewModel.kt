@@ -3,21 +3,26 @@ package de.lamaka.fourcastie.home
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.liveData
 import de.lamaka.fourcastie.base.BaseViewModel
-import de.lamaka.fourcastie.city.WeatherView
+import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
 import de.lamaka.fourcastie.domain.location.LocationDetector
 import de.lamaka.fourcastie.domain.location.MissingLocationPermissionException
 import de.lamaka.fourcastie.domain.location.UserLocation
+import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
+import de.lamaka.fourcastie.ui.model.ForecastView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 class HomeViewModel @ViewModelInject constructor(
     private val locationDetector: LocationDetector,
     private val weatherRepository: WeatherRepository,
-    private val mapper: Mapper<Weather, WeatherView>
+    private val weatherMapper: Mapper<Weather, WeatherView>,
+    private val forecastMapper: Mapper<Forecast, ForecastView>
 ) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(HomeAction.LoadWeatherForCurrentPosition) {
 
     override fun perform(action: HomeAction) = liveData {
@@ -51,8 +56,11 @@ class HomeViewModel @ViewModelInject constructor(
             }
 
             return@withContext try {
-                val weather = weatherRepository.loadForLocation(location.latitude, location.longitude)
-                HomeActionResult.WeatherLoaded(weather)
+                coroutineScope {
+                    val weatherDeferred = async { weatherRepository.loadWeather(location.latitude, location.longitude) }
+                    val forecastDeferred = async { weatherRepository.loadForecast(location.latitude, location.longitude) }
+                    HomeActionResult.WeatherLoaded(weatherDeferred.await(), forecastDeferred.await())
+                }
             } catch (e: WeatherRepositoryException) {
                 HomeActionResult.FailedToLoadWeather(e.error.message)
             }
@@ -67,7 +75,10 @@ class HomeViewModel @ViewModelInject constructor(
             is HomeActionResult.WeatherLoaded -> currentState.copy(
                 loading = false,
                 error = null,
-                weather = mapper.map(result.weather),
+                weather = WeatherForCity(
+                    weatherMapper.map(result.weather),
+                    result.forecast.map { forecastMapper.map(it) }
+                ),
                 missingPermissions = emptyList()
             )
             is HomeActionResult.FailedToLoadWeather -> currentState.copy(

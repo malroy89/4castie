@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
+import de.lamaka.fourcastie.home.WeatherForCity
 import de.lamaka.fourcastie.ui.WeatherDetailsView
 
 // TODO make home fragment as a container of a Bottom Nav, in order to make CityFragment fullscreen
@@ -47,7 +48,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             CityViewState.Init -> viewModel.handle(CityAction.Load(args.cityName))
             CityViewState.Loading -> renderLoading()
             is CityViewState.Error -> renderError(state.message)
-            is CityViewState.Loaded -> renderWeather(state.weatherView)
+            is CityViewState.Loaded -> renderWeather(state.weather)
         }
 
         /*if (state.isEmpty()) { // a bit hacky :), but for now let's consider that isEmpty means that the fragment has been just initialized
@@ -81,7 +82,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         weatherDetails?.visibility = View.GONE
     }
 
-    private fun renderWeather(weather: WeatherView) {
+    private fun renderWeather(weather: WeatherForCity) {
         weatherDetails?.render(weather)
         weatherDetails?.visibility = View.VISIBLE
         progress?.visibility = View.GONE

@@ -8,6 +8,7 @@ fun WeatherIconView.showIcon(condition: String?) {
     getIconResources(context, this, condition)
 }
 
+// TODO take into account night time
 private fun getIconResources(context: Context, iconView: WeatherIconView, condition: String?) {
     if (condition != null) {
         when {

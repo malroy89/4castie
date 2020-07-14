@@ -13,8 +13,7 @@ class CitiesAdapter(private val clickListener: (String) -> (Unit)) : RecyclerVie
     class CitiesViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.clickable_simple_list_item_1, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.clickable_simple_list_item_1, parent, false)
         return CitiesViewHolder(view as TextView)
     }
 

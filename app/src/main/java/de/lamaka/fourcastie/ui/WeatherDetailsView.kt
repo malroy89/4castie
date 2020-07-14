@@ -5,9 +5,11 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.github.pwittchen.weathericonview.WeatherIconView
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.city.WeatherView
+import de.lamaka.fourcastie.home.WeatherForCity
+import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.misc.showIcon
 
 class WeatherDetailsView : ConstraintLayout {
@@ -21,6 +23,7 @@ class WeatherDetailsView : ConstraintLayout {
     private var pressure: TextView? = null
     private var wind: TextView? = null
     private var weatherDetails: View? = null
+    private var forecast: RecyclerView? = null
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -44,7 +47,10 @@ class WeatherDetailsView : ConstraintLayout {
         }
 
         View.inflate(context, R.layout.layout_weather_details, this)
-//        addView(view)
+    }
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
         weatherIn = findViewById(R.id.weather_in_text)
         weatherIcon = findViewById(R.id.weather_icon)
         temperature = findViewById(R.id.weather_temperature)
@@ -54,13 +60,11 @@ class WeatherDetailsView : ConstraintLayout {
         pressure = findViewById(R.id.pressure_text)
         wind = findViewById(R.id.wind_speed_text)
         weatherDetails = findViewById(R.id.weather_det)
+        forecast = findViewById(R.id.forecast)
     }
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-    }
-
-    fun render(weather: WeatherView) {
+    fun render(weatherForCity: WeatherForCity) {
+        val weather = weatherForCity.weather
         weatherIn?.text = weather.city
         weatherIcon?.showIcon(weather.description)
         temperature?.text = weather.temperature
@@ -69,6 +73,8 @@ class WeatherDetailsView : ConstraintLayout {
         humidity?.text = weather.humidity
         pressure?.text = weather.pressure
         wind?.text = weather.windSpeed
+
+        forecast?.adapter = ForecastAdapter(weatherForCity.forecast)
     }
 
 }

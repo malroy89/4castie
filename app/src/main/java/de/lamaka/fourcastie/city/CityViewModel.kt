@@ -6,12 +6,18 @@ import de.lamaka.fourcastie.base.BaseViewModel
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
+import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
-import kotlinx.coroutines.delay
+import de.lamaka.fourcastie.home.WeatherForCity
+import de.lamaka.fourcastie.ui.model.ForecastView
+import de.lamaka.fourcastie.ui.model.WeatherView
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 
 class CityViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository,
-    private val mapper: Mapper<Weather, WeatherView>
+    private val mapper: Mapper<Weather, WeatherView>,
+    private val forecastMapper: Mapper<Forecast, ForecastView>
 ) : BaseViewModel<CityAction, CityViewState, CityActionResult>(CityAction.Init) {
 
     override var currentState: CityViewState = CityViewState.Init
@@ -34,7 +40,11 @@ class CityViewModel @ViewModelInject constructor(
         }
 
         return try {
-            CityActionResult.Loaded(weatherRepository.loadForCity(cityName))
+            coroutineScope {
+                val weatherDeferred = async { weatherRepository.loadWeather(cityName) }
+                val forecastDeferred = async { weatherRepository.loadForecast(cityName) }
+                CityActionResult.Loaded(weatherDeferred.await(), forecastDeferred.await())
+            }
         } catch (e: WeatherRepositoryException) {
             CityActionResult.FailedToLoad(e.error.message)
         }
@@ -44,7 +54,12 @@ class CityViewModel @ViewModelInject constructor(
         return when (result) {
             CityActionResult.Init -> CityViewState.Init
             CityActionResult.Loading -> CityViewState.Loading
-            is CityActionResult.Loaded -> CityViewState.Loaded(mapper.map(result.weather))
+            is CityActionResult.Loaded -> CityViewState.Loaded(
+                WeatherForCity(
+                    mapper.map(result.weather),
+                    result.forecast.map { forecastMapper.map(it) }
+                )
+            )
             is CityActionResult.FailedToLoad -> CityViewState.Error(result.message)
         }
     }

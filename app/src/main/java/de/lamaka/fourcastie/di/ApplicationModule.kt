@@ -14,19 +14,22 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import de.lamaka.fourcastie.BuildConfig
 import de.lamaka.fourcastie.InjectFragmentFactory
-import de.lamaka.fourcastie.city.WeatherView
+import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.data.NetworkWeatherRepository
 import de.lamaka.fourcastie.data.OpenWeatherApiService
 import de.lamaka.fourcastie.data.SharedPrefsCityRepository
 import de.lamaka.fourcastie.data.interceptor.ApiKeyInterceptor
 import de.lamaka.fourcastie.data.interceptor.ApiRequestInterceptor
 import de.lamaka.fourcastie.data.interceptor.UnitSettingInterceptor
+import de.lamaka.fourcastie.data.mapper.ForecastToViewMapper
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.data.mapper.WeatherToViewMapper
 import de.lamaka.fourcastie.domain.CityRepository
 import de.lamaka.fourcastie.domain.WeatherRepository
+import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
 import de.lamaka.fourcastie.settings.SettingsFragment
+import de.lamaka.fourcastie.ui.model.ForecastView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
@@ -97,7 +100,10 @@ abstract class WeatherRepositoryModule {
 @InstallIn(ApplicationComponent::class)
 abstract class MapperModule {
     @Binds
-    abstract fun bindWeatherToWeatherViewMapper(mapper: WeatherToViewMapper): Mapper<Weather, WeatherView>
+    abstract fun bindWeatherToViewMapper(mapper: WeatherToViewMapper): Mapper<Weather, WeatherView>
+
+    @Binds
+    abstract fun bindForecastToViewMapper(mapper: ForecastToViewMapper): Mapper<Forecast, ForecastView>
 }
 
 @Module

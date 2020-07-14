@@ -1,4 +1,4 @@
-package de.lamaka.fourcastie.city
+package de.lamaka.fourcastie.ui.model
 
 data class WeatherView(
     val city: String,

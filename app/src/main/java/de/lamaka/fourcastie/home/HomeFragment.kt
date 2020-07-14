@@ -10,11 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.github.pwittchen.weathericonview.WeatherIconView
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.city.WeatherView
-import de.lamaka.fourcastie.misc.showIcon
+import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.ui.WeatherDetailsView
 
 @AndroidEntryPoint
@@ -90,7 +88,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         weatherDetails?.visibility = View.GONE
     }
 
-    private fun renderWeather(weather: WeatherView) {
+    private fun renderWeather(weather: WeatherForCity) {
         progress?.visibility = View.GONE
         error?.visibility = View.GONE
 

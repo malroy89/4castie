@@ -7,5 +7,9 @@ data class ApiWeatherCondition(
     val pressure: Double,
     val humidity: Double,
     @SerializedName("feels_like")
-    val feelsLike: Double
+    val feelsLike: Double,
+    @SerializedName("temp_min")
+    val tempMin: Double,
+    @SerializedName("temp_max")
+    val tempMax: Double
 )
