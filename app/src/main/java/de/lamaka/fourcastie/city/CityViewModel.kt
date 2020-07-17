@@ -63,7 +63,4 @@ class CityViewModel @ViewModelInject constructor(
             is CityActionResult.FailedToLoad -> CityViewState.Error(result.message)
         }
     }
-
-
-
 }

@@ -12,7 +12,6 @@ import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.ui.WeatherDetailsView
 
 @AndroidEntryPoint

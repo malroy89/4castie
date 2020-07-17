@@ -29,10 +29,14 @@ final class Deps {
 
         static final class test {
             static final String junit = "4.12"
+            static final String mockito = "3.4.0"
+            static final String truth = "1.0"
+            static final String coroutines = "1.3.7"
 
             static final class androidx {
                 static final String junit = "1.1.1"
                 static final String espresso = "3.2.0"
+                static final String arch = "2.1.0"
             }
         }
     }
@@ -90,9 +94,13 @@ final class Deps {
 
     static final class test {
         static final String junit = "junit:junit:$versions.test.junit"
+        static final String mockito = "org.mockito:mockito-core:$versions.test.mockito"
+        static final String truth = "com.google.truth:truth:${versions.test.truth}"
+        static final String coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.test.coroutines"
 
         static final class androidx {
             static final String junit = "androidx.test.ext:junit:$versions.test.androidx.junit"
+            static final String arch = "androidx.arch.core:core-testing:$versions.test.androidx.arch"
 
             static final class espresso {
                 static final String core = "androidx.test.espresso:espresso-core:$versions.test.androidx.espresso"

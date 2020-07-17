@@ -1,7 +1,6 @@
 package de.lamaka.fourcastie.home
 
 import de.lamaka.fourcastie.base.ActionResult
-import de.lamaka.fourcastie.domain.location.UserLocation
 import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
 

@@ -37,8 +37,8 @@ class LocationDetector @Inject constructor(
             !isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
             throw MissingLocationPermissionException(
-                Manifest.permission.ACCESS_FINE_LOCATION/*,
-                Manifest.permission.ACCESS_COARSE_LOCATION*/
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
 

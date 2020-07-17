@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.pwittchen.weathericonview.WeatherIconView
 import de.lamaka.fourcastie.R
 import de.lamaka.fourcastie.home.WeatherForCity
-import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.misc.showIcon
 
 class WeatherDetailsView : ConstraintLayout {

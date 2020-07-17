@@ -3,11 +3,11 @@ package de.lamaka.fourcastie.data.mapper
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.lamaka.fourcastie.R
-import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.domain.SettingsStorage
 import de.lamaka.fourcastie.domain.UnitSystem
 import de.lamaka.fourcastie.domain.UnitSystem.*
 import de.lamaka.fourcastie.domain.model.Weather
+import de.lamaka.fourcastie.ui.model.WeatherView
 import javax.inject.Inject
 
 class WeatherToViewMapper @Inject constructor(

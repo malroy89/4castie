@@ -2,7 +2,6 @@ package de.lamaka.fourcastie.data
 
 import de.lamaka.fourcastie.data.model.ApiForecast
 import de.lamaka.fourcastie.data.model.ApiWeather
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

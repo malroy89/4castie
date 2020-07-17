@@ -30,6 +30,10 @@ android {
         resValue "string", "unit_setting_key", "unit_setting_key"
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -78,7 +82,13 @@ dependencies {
 
     implementation Deps.weatherIconView
 
+    testImplementation Deps.test.coroutines
     testImplementation Deps.test.junit
+    testImplementation Deps.test.mockito
+    testImplementation Deps.test.androidx.arch
+    testImplementation Deps.test.androidx.junit
+    testImplementation Deps.test.truth
+
     androidTestImplementation Deps.test.androidx.junit
     androidTestImplementation Deps.test.androidx.espresso.core
 }

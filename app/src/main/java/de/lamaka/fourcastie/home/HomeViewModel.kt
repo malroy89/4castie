@@ -2,8 +2,8 @@ package de.lamaka.fourcastie.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.liveData
+import de.lamaka.fourcastie.DispatcherProvider
 import de.lamaka.fourcastie.base.BaseViewModel
-import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
@@ -13,12 +13,11 @@ import de.lamaka.fourcastie.domain.location.UserLocation
 import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
 import de.lamaka.fourcastie.ui.model.ForecastView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
+import de.lamaka.fourcastie.ui.model.WeatherView
+import kotlinx.coroutines.*
 
 class HomeViewModel @ViewModelInject constructor(
+    private val dispatcherProvider: DispatcherProvider,
     private val locationDetector: LocationDetector,
     private val weatherRepository: WeatherRepository,
     private val weatherMapper: Mapper<Weather, WeatherView>,
@@ -43,7 +42,7 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     private suspend fun loadWeatherForCurrentLocation(): HomeActionResult {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcherProvider.io()) {
             val location: UserLocation?
             try {
                 location = locationDetector.getNetworkProvidedLocation() ?: locationDetector.getGpsProvidedLocation()
@@ -71,7 +70,12 @@ class HomeViewModel @ViewModelInject constructor(
 
     override fun reduce(result: HomeActionResult): HomeViewState {
         return when (result) {
-            HomeActionResult.Loading -> currentState.copy(loading = true)
+            HomeActionResult.Loading -> currentState.copy(
+                loading = true,
+                error = null,
+                weather = null,
+                missingPermissions = emptyList()
+            )
             is HomeActionResult.WeatherLoaded -> currentState.copy(
                 loading = false,
                 error = null,

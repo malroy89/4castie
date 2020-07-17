@@ -13,8 +13,9 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.multibindings.IntoMap
 import de.lamaka.fourcastie.BuildConfig
+import de.lamaka.fourcastie.DefaultDispatcherProvider
+import de.lamaka.fourcastie.DispatcherProvider
 import de.lamaka.fourcastie.InjectFragmentFactory
-import de.lamaka.fourcastie.ui.model.WeatherView
 import de.lamaka.fourcastie.data.NetworkWeatherRepository
 import de.lamaka.fourcastie.data.OpenWeatherApiService
 import de.lamaka.fourcastie.data.SharedPrefsCityRepository
@@ -30,6 +31,7 @@ import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
 import de.lamaka.fourcastie.settings.SettingsFragment
 import de.lamaka.fourcastie.ui.model.ForecastView
+import de.lamaka.fourcastie.ui.model.WeatherView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
@@ -84,6 +86,9 @@ object ApplicationModule {
     @Provides
     fun provideCityStorageSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
+
+    @Provides
+    fun provideDispatcherProvider(): DispatcherProvider = DefaultDispatcherProvider
 }
 
 @Module

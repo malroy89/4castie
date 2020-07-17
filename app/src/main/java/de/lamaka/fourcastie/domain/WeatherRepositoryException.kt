@@ -1,8 +1,6 @@
 package de.lamaka.fourcastie.domain
 
-import java.lang.Exception
-
-class WeatherRepositoryException(val error: Error) : Exception() {
+class WeatherRepositoryException(val error: Error) : RuntimeException() {
 
     enum class Error(val message: String) {
         SERVER_ERROR("Server responded with invalid response"),
