@@ -16,9 +16,8 @@ import kotlinx.coroutines.coroutineScope
 
 class CityViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository,
-    private val mapper: Mapper<Weather, WeatherView>,
-    private val forecastMapper: Mapper<Forecast, ForecastView>
-) : BaseViewModel<CityAction, CityViewState, CityActionResult>(CityAction.Init) {
+    reducer: CityReducer
+) : BaseViewModel<CityAction, CityViewState, CityActionResult>(CityAction.Init, reducer) {
 
     override var currentState: CityViewState = CityViewState.Init
 
@@ -50,17 +49,4 @@ class CityViewModel @ViewModelInject constructor(
         }
     }
 
-    override fun reduce(result: CityActionResult): CityViewState {
-        return when (result) {
-            CityActionResult.Init -> CityViewState.Init
-            CityActionResult.Loading -> CityViewState.Loading
-            is CityActionResult.Loaded -> CityViewState.Loaded(
-                WeatherForCity(
-                    mapper.map(result.weather),
-                    result.forecast.map { forecastMapper.map(it) }
-                )
-            )
-            is CityActionResult.FailedToLoad -> CityViewState.Error(result.message)
-        }
-    }
 }

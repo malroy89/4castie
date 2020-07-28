@@ -32,9 +32,7 @@ class CityViewModelTest {
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Mock
-    private lateinit var weatherMapper: Mapper<Weather, WeatherView>
-    @Mock
-    private lateinit var forecastMapper: Mapper<Forecast, ForecastView>
+    private lateinit var reducer: CityReducer
     @Mock
     private lateinit var observer: Observer<CityViewState>
     @Captor
@@ -44,9 +42,7 @@ class CityViewModelTest {
 
     @Before
     fun setUp() {
-        `when`(weatherMapper.map(any())).thenReturn(mock(WeatherView::class.java))
-        `when`(forecastMapper.map(any())).thenReturn(mock(ForecastView::class.java))
-        subject = CityViewModel(FakeWeatherRepository(), weatherMapper, forecastMapper)
+        subject = CityViewModel(FakeWeatherRepository(), reducer)
         subject.viewState.observeForever(observer)
     }
 
@@ -61,8 +57,8 @@ class CityViewModelTest {
             assertThat(allValues[2]).isInstanceOf(CityViewState.Loaded::class.java)
         }
 
-        verify(weatherMapper).map(any())
-        verify(forecastMapper, times(3)).map(any())
+//        verify(weatherMapper).map(any())
+//        verify(forecastMapper, times(3)).map(any())
     }
 
     @Test

@@ -6,8 +6,9 @@ import de.lamaka.fourcastie.base.BaseViewModel
 import de.lamaka.fourcastie.domain.CityRepository
 
 class CitiesViewModel @ViewModelInject constructor(
-    private val cityRepository: CityRepository
-) : BaseViewModel<CitiesAction, CitiesViewState, CitiesActionResult>(CitiesAction.Load) {
+    private val cityRepository: CityRepository,
+    cityReducer: CitiesReducer
+) : BaseViewModel<CitiesAction, CitiesViewState, CitiesActionResult>(CitiesAction.Load, cityReducer) {
 
     override fun perform(action: CitiesAction) = liveData {
         when (action) {
@@ -26,13 +27,5 @@ class CitiesViewModel @ViewModelInject constructor(
     }
 
     override var currentState: CitiesViewState = CitiesViewState()
-
-    override fun reduce(result: CitiesActionResult): CitiesViewState {
-        return when (result) {
-            is CitiesActionResult.Loaded -> currentState.copy(addCity = false, cities = result.cities)
-            CitiesActionResult.AddCity -> currentState.copy(addCity = true)
-            CitiesActionResult.AddCityCancelled -> currentState.copy(addCity = false)
-        }
-    }
 
 }

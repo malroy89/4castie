@@ -2,8 +2,8 @@ package de.lamaka.fourcastie.cities
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import de.lamaka.fourcastie.misc.CoroutinesTestRule
 import de.lamaka.fourcastie.FakeCityRepository
+import de.lamaka.fourcastie.misc.CoroutinesTestRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -11,10 +11,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-@RunWith(JUnit4::class)
+@RunWith(MockitoJUnitRunner::class)
 class CitiesViewModelTest {
 
     @get:Rule
@@ -22,6 +23,9 @@ class CitiesViewModelTest {
 
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
+
+    @Mock
+    private lateinit var reducer: CitiesReducer
 
     private lateinit var subject: CitiesViewModel
 
@@ -31,7 +35,8 @@ class CitiesViewModelTest {
             FakeCityRepository().apply {
                 saveCity("Berlin")
                 saveCity("Hamburg")
-            }
+            },
+            reducer
         )
 
         subject.viewState.observeForever {}

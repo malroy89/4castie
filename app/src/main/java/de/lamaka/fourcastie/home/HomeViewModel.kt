@@ -20,9 +20,11 @@ class HomeViewModel @ViewModelInject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val locationDetector: LocationDetector,
     private val weatherRepository: WeatherRepository,
-    private val weatherMapper: Mapper<Weather, WeatherView>,
-    private val forecastMapper: Mapper<Forecast, ForecastView>
-) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(HomeAction.LoadWeatherForCurrentPosition) {
+    homeReducer: HomeReducer
+) : BaseViewModel<HomeAction, HomeViewState, HomeActionResult>(
+    HomeAction.LoadWeatherForCurrentPosition,
+    homeReducer
+) {
 
     override fun perform(action: HomeAction) = liveData {
         when (action) {
@@ -67,37 +69,6 @@ class HomeViewModel @ViewModelInject constructor(
     }
 
     override var currentState: HomeViewState = HomeViewState()
-
-    override fun reduce(result: HomeActionResult): HomeViewState {
-        return when (result) {
-            HomeActionResult.Loading -> currentState.copy(
-                loading = true,
-                error = null,
-                weather = null,
-                missingPermissions = emptyList()
-            )
-            is HomeActionResult.WeatherLoaded -> currentState.copy(
-                loading = false,
-                error = null,
-                weather = WeatherForCity(
-                    weatherMapper.map(result.weather),
-                    result.forecast.map { forecastMapper.map(it) }
-                ),
-                missingPermissions = emptyList()
-            )
-            is HomeActionResult.FailedToLoadWeather -> currentState.copy(
-                loading = false,
-                error = result.message,
-                weather = null,
-                missingPermissions = emptyList()
-            )
-            is HomeActionResult.MissingPermission -> currentState.copy(
-                loading = false,
-                error = null,
-                missingPermissions = result.permissions
-            )
-        }
-    }
 
 }
 

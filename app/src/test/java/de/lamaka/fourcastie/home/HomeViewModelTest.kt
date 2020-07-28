@@ -41,10 +41,7 @@ class HomeViewModelTest {
     private lateinit var locationDetector: LocationDetector
 
     @Mock
-    private lateinit var weatherMapper: Mapper<Weather, WeatherView>
-
-    @Mock
-    private lateinit var forecastMapper: Mapper<Forecast, ForecastView>
+    private lateinit var reducer: HomeReducer
 
     @Mock
     private lateinit var observer: Observer<HomeViewState>
@@ -58,15 +55,11 @@ class HomeViewModelTest {
 
     @Before
     fun setUp() {
-        `when`(weatherMapper.map(any())).thenReturn(mock(WeatherView::class.java))
-        `when`(forecastMapper.map(any())).thenReturn(mock(ForecastView::class.java))
-
         subject = HomeViewModel(
             coroutinesTestRule.testDispatcherProvider,
             locationDetector,
             weatherRepository,
-            weatherMapper,
-            forecastMapper
+            reducer
         )
     }
 

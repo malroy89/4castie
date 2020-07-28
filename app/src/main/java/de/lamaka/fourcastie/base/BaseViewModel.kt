@@ -6,7 +6,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 abstract class BaseViewModel<A : Action, VS : ViewState, AR : ActionResult> constructor(
-    initAction: A
+    initAction: A,
+    reducer: Reducer<VS, AR>
 ) : ViewModel() {
 
     protected abstract var currentState: VS
@@ -15,7 +16,7 @@ abstract class BaseViewModel<A : Action, VS : ViewState, AR : ActionResult> cons
     val viewState: LiveData<VS> =
         Transformations.distinctUntilChanged(
             Transformations.map(Transformations.switchMap(nextAction) { perform(it) }) {
-                currentState = reduce(it)
+                currentState = reducer.reduce(currentState, it)
                 currentState
             }
         )
@@ -25,5 +26,4 @@ abstract class BaseViewModel<A : Action, VS : ViewState, AR : ActionResult> cons
     }
 
     protected abstract fun perform(action: A): LiveData<AR>
-    protected abstract fun reduce(result: AR): VS
 }
