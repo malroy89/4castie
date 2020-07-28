@@ -14,7 +14,8 @@ import javax.inject.Inject
 class LocationDetector @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager: LocationManager =
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     @Throws(WeatherRepositoryException::class)
     fun getGpsProvidedLocation(): UserLocation? {

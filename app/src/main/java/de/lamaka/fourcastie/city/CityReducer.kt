@@ -1,6 +1,8 @@
 package de.lamaka.fourcastie.city
 
+import de.lamaka.fourcastie.base.ActionResult
 import de.lamaka.fourcastie.base.Reducer
+import de.lamaka.fourcastie.base.ViewState
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
@@ -29,4 +31,18 @@ class CityReducer @Inject constructor(
             is CityActionResult.FailedToLoad -> CityViewState.Error(actionResult.message)
         }
     }
+}
+
+sealed class CityActionResult : ActionResult {
+    object Init : CityActionResult()
+    object Loading : CityActionResult()
+    data class Loaded(val weather: Weather, val forecast: List<Forecast>) : CityActionResult()
+    data class FailedToLoad(val message: String) : CityActionResult()
+}
+
+sealed class CityViewState : ViewState {
+    object Init : CityViewState()
+    object Loading : CityViewState()
+    data class Error(val message: String) : CityViewState()
+    data class Loaded(val weather: WeatherForCity) : CityViewState()
 }

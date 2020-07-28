@@ -1,5 +1,6 @@
 package de.lamaka.fourcastie.home
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.model.Forecast
@@ -15,7 +16,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(AndroidJUnit4::class)
 class HomeReducerTest {
 
     @Mock
@@ -135,8 +136,8 @@ class HomeReducerTest {
 
     private fun assertErrorState(state: HomeViewState) {
         assertThat(state.loading).isFalse()
-        assertThat(state.error).isNotEmpty()
-        assertThat(state.missingPermissions).isEqualTo("Error")
+        assertThat(state.error).isEqualTo("Error")
+        assertThat(state.missingPermissions).isEmpty()
         assertThat(state.weather).isNull()
     }
 

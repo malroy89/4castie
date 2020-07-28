@@ -10,10 +10,12 @@ import de.lamaka.fourcastie.R
 import de.lamaka.fourcastie.misc.showIcon
 import de.lamaka.fourcastie.ui.model.ForecastView
 
-class ForecastAdapter(private val forecast: List<ForecastView>) : RecyclerView.Adapter<ForecastViewHolder>() {
+class ForecastAdapter(private val forecast: List<ForecastView>) :
+    RecyclerView.Adapter<ForecastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_forecast_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_forecast_item, parent, false)
         return ForecastViewHolder(view)
     }
 

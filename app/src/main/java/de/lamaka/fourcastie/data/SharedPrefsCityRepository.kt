@@ -2,9 +2,9 @@ package de.lamaka.fourcastie.data
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import de.lamaka.fourcastie.DispatcherProvider
 import de.lamaka.fourcastie.di.CityStorageSharedPrefs
 import de.lamaka.fourcastie.domain.CityRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -12,6 +12,7 @@ private const val CITIES_KEY = "cities"
 private const val CITY_SEPARATOR = ","
 
 class SharedPrefsCityRepository @Inject constructor(
+    private val dispatcherProvider: DispatcherProvider,
     @CityStorageSharedPrefs private val sharedPreferences: SharedPreferences
 ) : CityRepository {
 
@@ -31,7 +32,7 @@ class SharedPrefsCityRepository @Inject constructor(
         return performAction {
             val value = sharedPreferences.getString(CITIES_KEY, "") ?: ""
             if (value.isEmpty()) {
-                emptyList<String>()
+                return@performAction emptyList<String>()
             }
 
             value.split(CITY_SEPARATOR)
@@ -39,7 +40,7 @@ class SharedPrefsCityRepository @Inject constructor(
     }
 
     private suspend fun <T> performAction(action: () -> T): T {
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcherProvider.io()) {
             return@withContext action()
         }
     }

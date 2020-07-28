@@ -2,15 +2,10 @@ package de.lamaka.fourcastie.city
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.liveData
+import de.lamaka.fourcastie.base.Action
 import de.lamaka.fourcastie.base.BaseViewModel
-import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepository
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
-import de.lamaka.fourcastie.domain.model.Forecast
-import de.lamaka.fourcastie.domain.model.Weather
-import de.lamaka.fourcastie.home.WeatherForCity
-import de.lamaka.fourcastie.ui.model.ForecastView
-import de.lamaka.fourcastie.ui.model.WeatherView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
@@ -49,4 +44,9 @@ class CityViewModel @ViewModelInject constructor(
         }
     }
 
+}
+
+sealed class CityAction : Action {
+    object Init : CityAction()
+    data class Load(val cityName: String?) : CityAction()
 }

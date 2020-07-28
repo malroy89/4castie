@@ -1,6 +1,8 @@
 package de.lamaka.fourcastie.home
 
+import de.lamaka.fourcastie.base.ActionResult
 import de.lamaka.fourcastie.base.Reducer
+import de.lamaka.fourcastie.base.ViewState
 import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
@@ -13,7 +15,10 @@ class HomeReducer @Inject constructor(
     private val forecastMapper: Mapper<Forecast, ForecastView>
 ) : Reducer<HomeViewState, HomeActionResult> {
 
-    override fun reduce(currentState: HomeViewState, actionResult: HomeActionResult): HomeViewState {
+    override fun reduce(
+        currentState: HomeViewState,
+        actionResult: HomeActionResult
+    ): HomeViewState {
         return when (actionResult) {
             HomeActionResult.Loading -> currentState.copy(
                 loading = true,
@@ -44,3 +49,24 @@ class HomeReducer @Inject constructor(
         }
     }
 }
+
+sealed class HomeActionResult : ActionResult {
+    object Loading : HomeActionResult()
+    data class MissingPermission(val permissions: List<String>) : HomeActionResult()
+    data class WeatherLoaded(val weather: Weather, val forecast: List<Forecast>) :
+        HomeActionResult()
+
+    data class FailedToLoadWeather(val message: String) : HomeActionResult()
+}
+
+data class HomeViewState(
+    val loading: Boolean = false,
+    val weather: WeatherForCity? = null,
+    val error: String? = null,
+    val missingPermissions: List<String> = emptyList()
+) : ViewState
+
+data class WeatherForCity(
+    val weather: WeatherView,
+    val forecast: List<ForecastView>
+)

@@ -5,7 +5,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import de.lamaka.fourcastie.FakeWeatherRepository
-import de.lamaka.fourcastie.data.mapper.Mapper
 import de.lamaka.fourcastie.domain.WeatherRepositoryException
 import de.lamaka.fourcastie.domain.location.LocationDetector
 import de.lamaka.fourcastie.domain.location.MissingLocationPermissionException
@@ -13,9 +12,6 @@ import de.lamaka.fourcastie.domain.location.UserLocation
 import de.lamaka.fourcastie.domain.model.Forecast
 import de.lamaka.fourcastie.domain.model.Weather
 import de.lamaka.fourcastie.misc.CoroutinesTestRule
-import de.lamaka.fourcastie.misc.any
-import de.lamaka.fourcastie.ui.model.ForecastView
-import de.lamaka.fourcastie.ui.model.WeatherView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
@@ -230,31 +226,6 @@ class HomeViewModelTest {
                 assertLoadedState(allValues[1])
             }
         }
-
-    /*@Test
-    fun handle_whenErrorState_whenActionToLoadWeatherForLocation_shouldReturnCorrectState() =
-        coroutinesTestRule.runBlockingTest {
-            `when`(locationDetector.getNetworkProvidedLocation()).thenReturn(null)
-            `when`(locationDetector.getGpsProvidedLocation()).thenReturn(
-                UserLocation(56.0, 78.0)
-            )
-            `when`(weatherRepository.loadWeather(56.0, 78.0)).thenReturn(mock(Weather::class.java))
-            `when`(weatherRepository.loadForecast(56.0, 78.0)).thenReturn(
-                listOf(mock(Forecast::class.java))
-            )
-
-            subject.viewState.observeForever(observer)
-
-            viewStateCaptor.run {
-                verify(observer, times(2)).onChanged(capture())
-                assertLoadingState(allValues[0])
-                assertLoadedState(allValues[1])
-            }
-        }*/
-    /*@Test
-    fun reduce_whenLoadingResult_whenDefaultState_shouldReturnLoadingState() {
-        subject.red
-    }*/
 
     // TODO check states when for example from loaded to error and so on
 

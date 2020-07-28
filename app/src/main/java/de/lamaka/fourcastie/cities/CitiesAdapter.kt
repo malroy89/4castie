@@ -6,14 +6,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.lamaka.fourcastie.R
 
-class CitiesAdapter(private val clickListener: (String) -> (Unit)) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
+class CitiesAdapter(private val clickListener: (String) -> (Unit)) :
+    RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
 
     var cities: List<String> = emptyList()
 
     class CitiesViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.clickable_simple_list_item_1, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.clickable_simple_list_item_1, parent, false)
         return CitiesViewHolder(view as TextView)
     }
 
